@@ -1,0 +1,13 @@
+key: ghost
+version: 1.0.0
+tier: native
+auth: api_key
+surfaces:
+  - key: post
+    content_types: [text, image]
+    spec: {title_max_chars: 255, body_max_chars: 100000, links_allowed: true}
+rate_limits:
+  per_connection: {requests: 30, per_seconds: 60}
+capabilities: [publish, status, delete]
+error_map: {"429": PLATFORM_RATE_LIMIT, "401": CONNECTION_AUTH_EXPIRED, "422": PLATFORM_CONTENT_REJECTED}
+instance_param: base_url

@@ -1,0 +1,3 @@
+# AI use disclosure
+
+OpenAI Codex was used as an AI coding assistant to implement and review application code, tests, documentation, and requirement mapping for this assessment. No external generative model or API is used by the default application path. The supplied assessment brief remains the authority for required behavior. Connector simulation outputs are generated test records and are labeled as simulated; no generated record is presented as real platform evidence. Destination research has not been fabricated. The supplied Excel Submission Form is preserved, and its separate evidence copy labels simulations and unmeasured fields accurately.

@@ -1,0 +1,121 @@
+services:
+  api:
+    build: .
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      DATABASE_PATH: /data/incubrix.db
+      STORAGE_BACKEND: s3
+      STORAGE_PATH: /data/objects
+      S3_ENDPOINT_URL: http://minio:9000
+      S3_BUCKET: ${S3_BUCKET:-incubrix-results}
+      S3_ACCESS_KEY: ${MINIO_ROOT_USER:-incubrix-local}
+      S3_SECRET_KEY: ${MINIO_ROOT_PASSWORD:-change-this-local-only}
+      PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:-http://localhost:8000}
+      SIMULATION_MODE: ${SIMULATION_MODE:-true}
+      LEMMY_BASE_URL: http://lemmy:8536
+      GHOST_BASE_URL: http://ghost:2368
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - incubrix_data:/data
+    depends_on:
+      minio:
+        condition: service_started
+      minio-init:
+        condition: service_completed_successfully
+      lemmy:
+        condition: service_started
+      ghost:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/ready', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  minio:
+    image: quay.io/minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-incubrix-local}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-change-this-local-only}
+    ports:
+      - "127.0.0.1:9000:9000"
+      - "127.0.0.1:9001:9001"
+    volumes:
+      - minio_data:/data
+  minio-init:
+    image: quay.io/minio/mc:latest
+    depends_on:
+      minio:
+        condition: service_started
+    entrypoint: ["/bin/sh", "-c"]
+    command: >-
+      mc alias set local http://minio:9000 "$${MINIO_ROOT_USER}" "$${MINIO_ROOT_PASSWORD}" &&
+      until mc ready local; do sleep 2; done &&
+      mc mb --ignore-existing "local/$${S3_BUCKET}"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-incubrix-local}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-change-this-local-only}
+      S3_BUCKET: ${S3_BUCKET:-incubrix-results}
+
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: lemmy
+      POSTGRES_PASSWORD: local-only-lemmy-db
+      POSTGRES_DB: lemmy
+    volumes:
+      - lemmy_db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lemmy -d lemmy"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  pictrs:
+    image: asonix/pictrs:0.5
+    environment:
+      PICTRS__SERVER__API_KEY: local-only-pictrs
+    volumes:
+      - lemmy_images:/mnt
+    restart: unless-stopped
+
+  lemmy:
+    image: dessalines/lemmy:0.19.11
+    environment:
+      RUST_LOG: warn
+      LEMMY_DATABASE_URL: postgres://lemmy:local-only-lemmy-db@postgres:5432/lemmy
+      LEMMY_HOSTNAME: localhost:8536
+      LEMMY_PICTRS__URL: http://pictrs:8080/
+    ports:
+      - "127.0.0.1:8536:8536"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      pictrs:
+        condition: service_started
+    restart: unless-stopped
+
+  ghost:
+    image: ghost:5-alpine
+    environment:
+      url: http://localhost:2368
+      database__client: sqlite3
+      database__connection__filename: /var/lib/ghost/content/data/ghost.db
+      security__staffDeviceVerification: "false"
+    ports:
+      - "127.0.0.1:2368:2368"
+    volumes:
+      - ghost_data:/var/lib/ghost/content
+    restart: unless-stopped
+
+volumes:
+  incubrix_data:
+  minio_data:
+  lemmy_db:
+  lemmy_images:
+  ghost_data:
+

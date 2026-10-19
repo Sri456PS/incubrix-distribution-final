@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="31" time="7.126" timestamp="2026-10-19T13:12:40.293389+05:30" hostname="Sriram"><testcase classname="tests.test_api" name="test_health_readiness_and_structured_correlation" time="0.096" /><testcase classname="tests.test_api" name="test_destination_requires_idempotency_and_replays" time="0.161" /><testcase classname="tests.test_api" name="test_secret_material_is_rejected_from_destination_settings" time="0.079" /><testcase classname="tests.test_api" name="test_direct_live_connector_publish_requires_authorized_sandbox" time="0.165" /><testcase classname="tests.test_api" name="test_connector_contract_validate_publish_status_delete_and_idempotency" time="0.350" /><testcase classname="tests.test_api" name="test_publish_background_job_idempotency_and_manifest" time="0.365" /><testcase classname="tests.test_api" name="test_rule_policy_blocks_second_post_and_promotion" time="0.912" /><testcase classname="tests.test_api" name="test_publication_blocks_missing_required_ai_disclosure" time="0.351"><failure message="AssertionError: assert 'succeeded' == 'failed'&#10;  &#10;  - failed&#10;  + succeeded">client = &lt;starlette.testclient.TestClient object at 0x00000285ED9794C0&gt;
+add_destination = &lt;function add_destination.&lt;locals&gt;.add at 0x00000285ED9C0D60&gt;
+
+    def test_publication_blocks_missing_required_ai_disclosure(client, add_destination):
+        destination = add_destination(disclosure_required=True)
+        response = client.post(
+            "/api/v1/publications",
+            json={
+                "destination_id": destination["id"],
+                "rendition": {
+                    "title": "AI draft",
+                    "body": "Draft text.",
+                    "ai_generated": True,
+                },
+            },
+            headers={"Idempotency-Key": "missing-ai-disclosure"},
+        )
+        job = wait_job(client, response.json()["job_id"])
+&gt;       assert job["status"] == "failed"
+E       AssertionError: assert 'succeeded' == 'failed'
+E         
+E         - failed
+E         + succeeded
+
+tests\test_api.py:191: AssertionError</failure></testcase><testcase classname="tests.test_api" name="test_certification_runs_all_six_simulated_connectors_and_stores_evidence" time="2.039" /><testcase classname="tests.test_api" name="test_rule_proposal_requires_human_confirmation" time="0.446" /><testcase classname="tests.test_api" name="test_file_upload_is_idempotent_and_readable" time="0.125" /><testcase classname="tests.test_api" name="test_openapi_is_31_and_valid" time="0.411" /><testcase classname="tests.test_api" name="test_recommendation_evaluation_uses_labeled_cases" time="0.184" /><testcase classname="tests.test_catalogue" name="test_catalogue_import_normalizes_deduplicates_reports_bad_rows_and_waits_for_rules_confirmation" time="0.122" /><testcase classname="tests.test_catalogue" name="test_thousand_rows_meet_five_minute_import_target" time="0.175" /><testcase classname="tests.test_catalogue" name="test_import_rejects_unsupported_surface_and_malformed_boolean" time="0.080" /><testcase classname="tests.test_contracts" name="test_six_required_manifests_match_appendix_connector_keys" time="0.000" /><testcase classname="tests.test_contracts" name="test_all_manifest_files_are_valid_yaml_and_match_loaded_manifest" time="0.007" /><testcase classname="tests.test_contracts" name="test_shared_error_codes_from_appendix_are_present" time="0.000" /><testcase classname="tests.test_failures" name="test_rate_limit_wait_uses_retry_after_and_retries_once" time="0.001" /><testcase classname="tests.test_failures" name="test_platform_errors_map_to_shared_codes[401-CONNECTION_AUTH_EXPIRED]" time="0.001" /><testcase classname="tests.test_failures" name="test_platform_errors_map_to_shared_codes[422-PLATFORM_CONTENT_REJECTED]" time="0.001" /><testcase classname="tests.test_failures" name="test_platform_errors_map_to_shared_codes[503-PLATFORM_UNAVAILABLE]" time="0.001" /><testcase classname="tests.test_failures" name="test_connector_publish_timeout_is_cached_without_a_duplicate_call" time="0.211" /><testcase classname="tests.test_failures" name="test_certification_attempts_cleanup_and_persists_failed_evidence" time="0.178" /><testcase classname="tests.test_policy" name="test_format_and_media_constraints_are_field_level" time="0.000" /><testcase classname="tests.test_policy" name="test_promotion_links_and_disclosure_are_checked" time="0.000" /><testcase classname="tests.test_policy" name="test_canonical_only_links_allow_only_the_declared_canonical_url" time="0.000" /><testcase classname="tests.test_policy" name="test_disallowed_link_policy_rejects_canonical_url_field" time="0.000" /><testcase classname="tests.test_policy" name="test_relevance_is_bounded_and_explained" time="0.000" /><testcase classname="tests.test_policy" name="test_tailoring_stops_title_at_word_boundary_and_adds_disclosure" time="0.000" /></testsuite></testsuites>
