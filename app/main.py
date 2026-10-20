@@ -14,6 +14,7 @@ import uuid
 from contextlib import asynccontextmanager
 from datetime import UTC, datetime
 from ipaddress import ip_address
+from pathlib import Path
 from typing import Annotated, Any
 from urllib.parse import urlsplit
 
@@ -26,7 +27,7 @@ from fastapi import (
     Request,
     UploadFile,
 )
-from fastapi.responses import JSONResponse, Response
+from fastapi.responses import HTMLResponse, JSONResponse, Response
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from app.catalogue import list_destinations, normalize_url
@@ -114,6 +115,7 @@ async def correlation_and_logging(request: Request, call_next):
     correlation_id = request.headers.get("X-Correlation-Id") or str(uuid.uuid4())
     request.state.correlation_id = correlation_id
     if request.url.path not in {
+        "/",
         "/health",
         "/ready",
         "/openapi.json",
@@ -508,6 +510,15 @@ def _queue(
 @app.get("/health", tags=["health"])
 def health():
     return {"status": "ok"}
+
+
+@app.get("/", response_class=HTMLResponse, include_in_schema=False)
+def dashboard():
+    page = Path(__file__).parent / "ui" / "index.html"
+    content = page.read_text(encoding="utf-8").replace(
+        "__SIMULATION_MODE__", json.dumps(settings.simulation_mode)
+    )
+    return HTMLResponse(content=content)
 
 
 @app.get("/ready", tags=["health"])

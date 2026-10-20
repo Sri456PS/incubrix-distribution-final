@@ -11,7 +11,7 @@ Copy-Item .env.example .env
 docker compose up --build
 ```
 
-The API listens on `http://localhost:8000`; interactive docs are at `/docs`. Compose binds exposed services to loopback. It starts the application, MinIO, PostgreSQL/Pictrs/Lemmy, and Ghost. Platform accounts and credentials are not provisioned. Keep `SIMULATION_MODE=true` for safe runs; live publishing requires credentials and explicit authorization for the target sandbox.
+The dashboard and API listen on `http://localhost:8000`; interactive docs are at `/docs`. The dashboard shows health/readiness, connectors, and destinations, and lets you run local simulation jobs when `SIMULATION_MODE=true`. Compose binds exposed services to loopback. It starts the application, MinIO, PostgreSQL/Pictrs/Lemmy, and Ghost. Platform accounts and credentials are not provisioned. Keep `SIMULATION_MODE=true` for safe runs; live publishing requires credentials and explicit authorization for the target sandbox. The dashboard disables publish actions when simulation mode is off.
 
 For local Python development:
 
@@ -21,6 +21,8 @@ python -m venv .venv
 python -m pip install -r requirements-dev.txt
 python -m uvicorn app.main:app --reload
 ```
+
+Open `http://127.0.0.1:8000/` for the dashboard, or `http://127.0.0.1:8000/docs` for the API explorer. The dashboard runs safely with the default simulation configuration.
 
 `.env.example` contains local placeholders, not real credentials. `SERVICE_API_TOKEN` optionally protects application APIs; health/readiness and docs remain public. Connector secrets belong only in environment variables.
 
@@ -85,4 +87,4 @@ Coverage includes contracts, policies, import, idempotency, failure handling, si
 
 ## Submission limits
 
-The separate Excel Submission Form was not supplied and is not recreated. The requested 150 researched real destinations require research and evidence not included in this project. A live demo, hosted private repository, and video require external account/deployment access. Local simulation evidence is not live-community certification. See `REQUIREMENTS.md` and `REPORT.md` for tracked status.
+The original Excel Submission Form is preserved; `IncuBrix_Submission_Completed.xlsx` is a separate evidence copy with user-specific declaration/signature fields left for review. The requested 150 researched real destinations require research and evidence not included in this project. A live demo, hosted private repository, and video require external account/deployment access. Local simulation evidence is not live-community certification. See `REQUIREMENTS.md` and `REPORT.md` for tracked status.

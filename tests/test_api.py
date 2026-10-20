@@ -28,6 +28,31 @@ def test_health_readiness_and_structured_correlation(client):
     assert response.headers["X-Correlation-Id"] == "corr-test"
 
 
+def test_dashboard_page_renders_with_safe_simulation_controls(client):
+    response = client.get("/")
+    assert response.status_code == 200
+    assert response.headers["content-type"].startswith("text/html")
+    assert "IncuBrix Distribution" in response.text
+    assert "SIMULATION_MODE = true" in response.text
+    assert "Test simulation" in response.text
+    assert 'href="/docs"' in response.text
+
+
+def test_dashboard_is_public_but_dashboard_api_calls_still_require_token(
+    client, monkeypatch
+):
+    from app.config import settings
+
+    monkeypatch.setattr(settings, "service_api_token", "dashboard-test-token")
+    assert client.get("/").status_code == 200
+    assert client.get("/api/v1/connectors").status_code == 401
+    authorized = client.get(
+        "/api/v1/connectors",
+        headers={"Authorization": "Bearer dashboard-test-token"},
+    )
+    assert authorized.status_code == 200
+
+
 def test_destination_requires_idempotency_and_replays(client):
     payload = destination_payload()
     assert client.post("/api/v1/destinations", json=payload).status_code == 400

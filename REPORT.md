@@ -1,12 +1,12 @@
 # Assessment 4 implementation and test report
 
-**Run date:** 2026-10-19  
+**Run date:** 2026-10-20  
 **Source brief:** `IncuBrix_Assessment_4_Distribution_Long_Tail_Destination_Network_Brief.pdf`  
 **Scope:** Local project implementation; no live community posting or external deployment was performed.
 
 ## Delivered
 
-Implemented a Python/FastAPI service with six Appendix A connectors, YAML manifests, a SQLite destination/job/idempotency/certification store, filesystem and S3-compatible object storage, policy enforcement, CSV import, background publication/certification jobs, deterministic recommendation/evaluation, rules proposals, batch execution, Docker Compose services, health/readiness, JSON request logging and OpenAPI 3.1.
+Implemented a Python/FastAPI service with six Appendix A connectors, YAML manifests, a SQLite destination/job/idempotency/certification store, filesystem and S3-compatible object storage, policy enforcement, CSV import, background publication/certification jobs, deterministic recommendation/evaluation, rules proposals, batch execution, Docker Compose services, health/readiness, JSON request logging, OpenAPI 3.1, and a local browser dashboard at `/`.
 
 Simulation is the default. Automated certification records simulation evidence and attempts cleanup after a known publish. This evidence is not a platform certification. Native calls require user-configured credentials and authorized sandbox destinations; they were not exercised in this run.
 
@@ -18,7 +18,8 @@ Python 3.12/FastAPI follows the brief's Python 3.11+ connector option and gives 
 
 | Check | Result |
 |---|---|
-| `pytest -q --junitxml=test-pack/pytest-submission-results.xml` | **32 passed** in 7.70s; two dependency deprecation warnings; console and JUnit output saved in `test-pack/pytest-submission-run.log` and `test-pack/pytest-submission-results.xml` |
+| `python -m pytest -q -p no:cacheprovider` | **34 passed** in 9.51s; two dependency deprecation warnings; current dashboard run was printed to the terminal. Saving a new log under `test-pack/` was denied by the folder's access control; the previous 32-test log/JUnit files remain as historical evidence. |
+| Local Uvicorn HTTP smoke check | `GET /` returned 200 and the dashboard title/content; `/health` returned `ok`, `/ready` returned `ready`, and the connector endpoint returned six connectors. |
 | `ruff check app tests scripts` | **Passed** |
 | `ruff format --check app tests scripts` | **Passed** after formatting |
 | OpenAPI export | `python -m scripts.export_openapi` generated `openapi.yaml` |

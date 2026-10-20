@@ -92,7 +92,7 @@ Timeout + same-key retry; HTTP 429/reset; expired token; platform rejection; ove
 
 ## Audit notes from the current implementation
 
-- `pytest -q` passes 32 tests; the current submission run is retained at `test-pack/pytest-submission-run.log` and `test-pack/pytest-submission-results.xml`. Existing test results cover simulation paths and are not live provider verification.
+- The latest run in this workspace passed 34 tests (`python -m pytest -q -p no:cacheprovider`); its output was terminal-only because writes to `test-pack/` were denied. The retained 32-test logs are historical. Tests cover simulation paths and are not live provider verification.
 - Contract tests validate manifest shape and shared codes; full request/response field tests for every connector method remain needed. Connector adapters also write to the same SQLite `posts` table used by the service runtime, contrary to Appendix A's separation requirement.
 - The 1,000-row timing test stubs reachability, so it measures parsing and persistence only. `est_audience` is accepted as input; member-count enrichment is not implemented.
 - No Compose service currently provides the explicit mock HTTP servers requested for connectors other than local Lemmy/Ghost.

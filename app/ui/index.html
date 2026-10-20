@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f3f5f0" />
+    <title>IncuBrix Distribution</title>
+    <style>
+      :root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:#17251f;background:#f3f5f0;font-synthesis:none;text-rendering:optimizeLegibility}*{box-sizing:border-box}body{margin:0}button,input,select{font:inherit}button{cursor:pointer;border:0;border-radius:10px;background:#196e4b;color:#fff;font-weight:700;padding:11px 15px}button:hover{background:#13583b}button:disabled{opacity:.55;cursor:not-allowed}.subtle{background:#e8eee9;color:#214834}.subtle:hover{background:#dce8df}.wrap{max-width:1120px;margin:auto;padding:26px 22px 64px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:10px 0 24px}.brand{display:flex;align-items:center;gap:11px;font-weight:800;letter-spacing:-.03em}.mark{display:grid;place-items:center;width:38px;height:38px;border-radius:12px;background:#196e4b;color:white}.pill{display:inline-flex;align-items:center;gap:7px;border-radius:999px;background:#e1eee4;color:#22633e;padding:7px 11px;font-size:12px;font-weight:750}.dot{width:8px;height:8px;background:#39a56c;border-radius:99px}.hero{background:#153d30;color:#f8fbf7;border-radius:22px;padding:34px;display:grid;grid-template-columns:1.5fr .8fr;gap:26px;align-items:center;box-shadow:0 16px 44px #2445331a}.eyebrow{text-transform:uppercase;letter-spacing:.13em;font-size:11px;font-weight:800;color:#a8d6b8}.hero h1{font-size:clamp(30px,5vw,48px);line-height:1.06;letter-spacing:-.045em;margin:12px 0}.hero p{color:#d2e5d7;max-width:600px;line-height:1.65;margin-bottom:0}.hero-side{border:1px solid #ffffff2c;background:#ffffff0c;border-radius:16px;padding:18px}.hero-side strong{display:block;margin:8px 0}.hero-side span{color:#d2e5d7;font-size:13px;line-height:1.55}.notice{margin:18px 0 24px;padding:12px 15px;border:1px solid #d4e1d5;border-radius:12px;background:#e9f1e8;color:#325d3e;font-size:13px}.notice.warn{background:#fff4df;border-color:#f1d6a2;color:#704a11}.section-head{display:flex;justify-content:space-between;align-items:end;gap:14px;margin:30px 0 14px}.section-head h2{font-size:21px;letter-spacing:-.025em;margin:0}.section-head p{color:#6b786f;margin:5px 0 0;font-size:13px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}.card,.panel{background:#fff;border:1px solid #e3e9e3;border-radius:16px;box-shadow:0 5px 18px #1f38230a}.card{padding:17px}.card .label{font-size:12px;color:#718077}.card .value{font-weight:800;font-size:27px;margin-top:9px;letter-spacing:-.04em}.panel{padding:20px}.two{display:grid;grid-template-columns:1fr 1fr;gap:15px}.fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}label{font-size:12px;color:#54645a;font-weight:700}input,select{width:100%;border:1px solid #dce4dc;border-radius:9px;padding:10px 11px;background:#fff;color:#17251f}input:focus,select:focus{outline:3px solid #cde8d4;border-color:#4a9e69}.actions{display:flex;align-items:center;gap:10px;margin-top:14px}.muted{font-size:12px;color:#77847b}.dest-list{display:grid;gap:9px}.dest{display:flex;justify-content:space-between;gap:14px;align-items:center;border:1px solid #e8ede8;border-radius:12px;padding:12px 13px}.dest strong{display:block;font-size:14px}.dest small{display:block;color:#77847b;margin-top:4px}.empty{padding:22px;border:1px dashed #cbd8ce;border-radius:12px;color:#6e7b72;text-align:center;font-size:13px}.output{white-space:pre-wrap;overflow-wrap:anywhere;background:#13251c;color:#d9eee0;border-radius:12px;padding:14px;font-size:12px;line-height:1.6;max-height:300px;overflow:auto}.error{color:#a3332b;background:#fff0ed;border:1px solid #f1c6c0;padding:12px;border-radius:10px;font-size:13px}.footer{color:#7a877e;font-size:12px;text-align:center;margin-top:28px}@media(max-width:760px){.hero{grid-template-columns:1fr;padding:25px}.grid{grid-template-columns:1fr}.two{grid-template-columns:1fr}.top{align-items:flex-start}.section-head{align-items:flex-start;flex-direction:column}.fields{grid-template-columns:1fr}.field.full{grid-column:auto}}
+    </style>
+  </head>
+  <body>
+    <main class="wrap">
+      <header class="top">
+        <div class="brand"><span class="mark">IB</span><span>IncuBrix <span style="color:#718077;font-weight:600">/ Distribution</span></span></div>
+        <span id="mode" class="pill"><i class="dot"></i> Safe simulation</span>
+      </header>
+
+      <section class="hero">
+        <div><div class="eyebrow">Long-tail destination network</div><h1>One place to prepare and test distribution.</h1><p>Manage destinations, inspect connector readiness, and run a controlled publication flow from this local dashboard.</p></div>
+        <div class="hero-side"><span>Environment</span><strong id="environment">Connecting to the API…</strong><span>Simulation keeps test posts inside local storage. No community receives a real post in simulation mode.</span></div>
+      </section>
+
+      <div id="notice" class="notice">Loading service health and connector catalogue…</div>
+
+      <section class="grid" aria-label="Service overview">
+        <article class="card"><div class="label">API health</div><div id="health" class="value">—</div></article>
+        <article class="card"><div class="label">Readiness</div><div id="ready" class="value">—</div></article>
+        <article class="card"><div class="label">Available connectors</div><div id="connector-count" class="value">—</div></article>
+      </section>
+
+      <section class="section-head"><div><h2>Connect to your local API</h2><p>Only needed if SERVICE_API_TOKEN is configured. The value stays in this page memory.</p></div></section>
+      <section class="panel">
+        <div class="fields"><div class="field"><label for="api-token">Optional service token</label><input id="api-token" type="password" autocomplete="off" placeholder="Leave blank if not configured" /></div></div>
+        <div class="actions"><button id="refresh" class="subtle" type="button">Refresh dashboard</button><span id="updated" class="muted"></span></div>
+      </section>
+
+      <section class="section-head"><div><h2>Destination catalogue</h2><p>Add a destination as configuration, then test a local simulation.</p></div></section>
+      <div class="two">
+        <section class="panel">
+          <form id="destination-form">
+            <div class="fields">
+              <div class="field full"><label for="name">Destination name</label><input id="name" name="name" required maxlength="200" placeholder="Example: Local Discourse" /></div>
+              <div class="field full"><label for="url">Destination URL</label><input id="url" name="url" type="url" required placeholder="https://community.example" /></div>
+              <div class="field"><label for="connector">Connector</label><select id="connector" name="connector" required></select></div>
+              <div class="field"><label for="surface">Surface</label><select id="surface" name="surface" required></select></div>
+              <div class="field full"><label for="tags">Audience tags</label><input id="tags" name="tags" value="ai, creators" placeholder="ai, creators" /></div>
+            </div>
+            <div class="actions"><button type="submit">Add destination</button><span class="muted">No credentials are stored here.</span></div>
+          </form>
+        </section>
+        <section class="panel"><div class="section-head" style="margin:0 0 12px"><div><h2 style="font-size:17px">Your destinations</h2><p id="dest-count">Loading…</p></div></div><div id="destinations" class="dest-list"><div class="empty">Loading catalogue…</div></div></section>
+      </div>
+
+      <section class="section-head"><div><h2>Latest action</h2><p>Results from destination setup and simulation jobs appear here.</p></div></section>
+      <section class="panel"><div id="output" class="muted">No action yet.</div></section>
+      <div id="error-box" aria-live="polite"></div>
+      <footer class="footer">IncuBrix Distribution · Local assessment dashboard · API docs at <a href="/docs">/docs</a></footer>
+    </main>
+    <script>
+      const SIMULATION_MODE = __SIMULATION_MODE__;
+      const $ = (id) => document.getElementById(id);
+      let connectors = [];
+      const token = () => $("api-token").value.trim();
+      function headers(extra = {}) { const h = {...extra}; if (token()) h.Authorization = `Bearer ${token()}`; return h; }
+      async function api(path, options = {}) {
+        const response = await fetch(path, {...options, headers: headers(options.headers || {})});
+        const data = response.status === 204 ? null : await response.json().catch(() => null);
+        if (!response.ok) throw new Error(data?.error?.message || `Request failed (${response.status})`);
+        return data;
+      }
+      function showError(message) { $("error-box").innerHTML = `<div class="error">${escapeHtml(message)}</div>`; }
+      function clearError() { $("error-box").replaceChildren(); }
+      function escapeHtml(value) { return String(value ?? "").replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch])); }
+      function setOutput(value) { $("output").className = "output"; $("output").textContent = typeof value === "string" ? value : JSON.stringify(value, null, 2); }
+      function setNotice(text, warning = false) { $("notice").textContent = text; $("notice").className = warning ? "notice warn" : "notice"; }
+      function drawConnectorOptions() {
+        const select = $("connector"); select.replaceChildren();
+        for (const item of connectors) { const opt = document.createElement("option"); opt.value = item.key; opt.textContent = item.key; select.append(opt); }
+        select.onchange = drawSurfaceOptions; drawSurfaceOptions();
+      }
+      function drawSurfaceOptions() {
+        const manifest = connectors.find(item => item.key === $("connector").value);
+        const select = $("surface"); select.replaceChildren();
+        for (const item of manifest?.surfaces || []) { const opt = document.createElement("option"); opt.value = item.key; opt.textContent = item.key; select.append(opt); }
+      }
+      function drawDestinations(items) {
+        $("dest-count").textContent = `${items.length} configured`;
+        const container = $("destinations"); container.replaceChildren();
+        if (!items.length) { container.innerHTML = '<div class="empty">No destinations yet. Add one here to get started.</div>'; return; }
+        for (const item of items) {
+          const row = document.createElement("article"); row.className = "dest";
+          const details = document.createElement("div"); details.innerHTML = `<strong>${escapeHtml(item.name)}</strong><small>${escapeHtml(item.connector_key)} · ${escapeHtml(item.surface)} · ${escapeHtml(item.language)}</small>`;
+          row.append(details);
+          if (SIMULATION_MODE && item.connector_key !== "assisted") {
+            const button = document.createElement("button"); button.type = "button"; button.className = "subtle"; button.textContent = "Test simulation";
+            button.onclick = () => runSimulation(item, button); row.append(button);
+          }
+          container.append(row);
+        }
+      }
+      async function refreshDashboard() {
+        clearError(); $("health").textContent = "Checking…"; $("ready").textContent = "Checking…";
+        try {
+          const [health, ready] = await Promise.all([api("/health"), api("/ready")]);
+          $("health").textContent = health.status === "ok" ? "Online" : "Unavailable";
+          $("ready").textContent = ready.status === "ready" ? "Ready" : "Not ready";
+          const [connectorData, destinationData] = await Promise.all([api("/api/v1/connectors"), api("/api/v1/destinations")]);
+          connectors = connectorData.connectors || []; $("connector-count").textContent = connectors.length; drawConnectorOptions(); drawDestinations(destinationData.destinations || []);
+          $("environment").textContent = SIMULATION_MODE ? "Safe simulation mode" : "Live mode — test publishing disabled in dashboard";
+          $("mode").innerHTML = SIMULATION_MODE ? '<i class="dot"></i> Safe simulation' : '<i class="dot" style="background:#d99c30"></i> Live mode';
+          setNotice(SIMULATION_MODE ? "Simulation is on. Test publications are kept local and do not reach a community." : "Live mode is configured. This dashboard disables publication actions to prevent accidental real posts.", !SIMULATION_MODE);
+          $("updated").textContent = `Updated ${new Date().toLocaleTimeString()}`;
+        } catch (error) { $("health").textContent = "—"; $("ready").textContent = "—"; $("connector-count").textContent = "—"; setNotice("Could not load the API. If a service token is configured, enter it above and refresh.", true); showError(error.message); }
+      }
+      $("destination-form").addEventListener("submit", async event => {
+        event.preventDefault(); clearError(); const button = event.submitter; button.disabled = true;
+        const connector = $("connector").value;
+        const payload = {name:$("name").value.trim(), url:$("url").value.trim(), platform_key:connector, surface:$("surface").value, category:"community", audience_tags:$("tags").value.split(",").map(s=>s.trim()).filter(Boolean), language:"en", connector_key:connector, settings:{}, rules_confirmed:true, automation_allowed:connector!=="assisted"};
+        try { const data = await api("/api/v1/destinations", {method:"POST", headers:{"Content-Type":"application/json","Idempotency-Key":crypto.randomUUID()}, body:JSON.stringify(payload)}); setOutput({message:"Destination added", destination:data}); $("destination-form").reset(); $("tags").value="ai, creators"; await refreshDashboard(); }
+        catch (error) { showError(error.message); } finally { button.disabled = false; }
+      });
+      async function runSimulation(destination, button) {
+        if (!SIMULATION_MODE) return; clearError(); button.disabled = true; button.textContent = "Running…";
+        try {
+          const created = await api("/api/v1/publications", {method:"POST", headers:{"Content-Type":"application/json","Idempotency-Key":crypto.randomUUID()}, body:JSON.stringify({destination_id:destination.id, rendition:{title:"Local simulation check", body:"This test post is generated by the IncuBrix local dashboard.", media_type:"text"}})});
+          let job;
+          for (let i=0;i<100;i++) { job=await api(`/api/v1/jobs/${encodeURIComponent(created.job_id)}`); if (["succeeded","failed"].includes(job.status)) break; await new Promise(resolve=>setTimeout(resolve,300)); }
+          if (!job || !["succeeded","failed"].includes(job.status)) throw new Error("The job is still running. Refresh and check the job in API docs.");
+          const result = job.status === "succeeded" ? await api(`/api/v1/jobs/${encodeURIComponent(created.job_id)}/result`) : job;
+          setOutput({job_id:created.job_id, status:job.status, result}); await refreshDashboard();
+        } catch (error) { showError(error.message); } finally { button.disabled = false; button.textContent = "Test simulation"; }
+      }
+      $("refresh").addEventListener("click", refreshDashboard);
+      $("api-token").addEventListener("keydown", event => { if(event.key === "Enter") refreshDashboard(); });
+      refreshDashboard();
+    </script>
+  </body>
+</html>

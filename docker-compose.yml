@@ -36,7 +36,7 @@ services:
       retries: 10
 
   minio:
-    image: quay.io/minio/minio:latest
+    image: netiedge/minio:RELEASE.2025-01-20T14-49-07Z
     command: server /data --console-address ":9001"
     environment:
       MINIO_ROOT_USER: ${MINIO_ROOT_USER:-incubrix-local}
@@ -47,7 +47,7 @@ services:
     volumes:
       - minio_data:/data
   minio-init:
-    image: quay.io/minio/mc:latest
+    image: netiedge/minio-mc:RELEASE.2025-01-17T23-25-50Z
     depends_on:
       minio:
         condition: service_started
